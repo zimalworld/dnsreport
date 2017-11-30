@@ -7,13 +7,19 @@ git clone https://github.com/zimalworld/dnsreport.git
 cd ./dnsreport
 #
 make
+
 #how to use it
 ./dnsreport 
+
 #input dns server address
+
 Enter dns server : 8.8.4.4
+
 #input Hostname to search
+
 Enter Hostname to Lookup : google.com
-#enter to see the result
+
+#return to see the result
 Resolving google.com
 Sending Packet...Done
 Receiving answer...Done
