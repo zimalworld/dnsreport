@@ -20,12 +20,19 @@ Enter dns server : 8.8.4.4
 Enter Hostname to Lookup : google.com
 
 #return to see the result
+
 Resolving google.com
+
 Sending Packet...Done
+
 Receiving answer...Done
+
 The response contains : 
+
  1 Answers.
+
  0 Authoritative Servers.
+
  0 Additional records.
 
 
