@@ -128,6 +128,7 @@ void processDnsMsgBuffer(unsigned char* buf,int offset){
 	struct DNS_HEADER *dns = NULL;
 	unsigned char *reader;
 	int i , j , stop , s;
+	int isaddress = 0;
 	struct RES_RECORD answers[20],auth[20],addit[20]; 
 
 	dns = (struct DNS_HEADER*) buf;
@@ -154,6 +155,7 @@ void processDnsMsgBuffer(unsigned char* buf,int offset){
 
 		if(ntohs(answers[i].resource->type) == T_A||ntohs(answers[i].resource->type) == T_AAAA) //if its an ipv4 address
 		{
+			isaddress = 1;
 			answers[i].rdata = (unsigned char*)malloc(ntohs(answers[i].resource->data_len)+10);
 
 			for(j=0 ; j<ntohs(answers[i].resource->data_len) ; j++)
@@ -184,22 +186,18 @@ void processDnsMsgBuffer(unsigned char* buf,int offset){
 		auth[i].rdata=ReadName(reader,buf,&stop);
 		reader+=stop;
 	}
-
 	//read additional
 	for(i=0;i<ntohs(dns->add_count);i++)
 	{
 		addit[i].name=ReadName(reader,buf,&stop);
 		reader+=stop;
-
 		addit[i].resource=(struct R_DATA*)(reader);
 		reader+=sizeof(struct R_DATA);
-
-		if(ntohs(answers[i].resource->type) == T_A||ntohs(answers[i].resource->type) == T_AAAA)
+		if(isaddress)
 		{
 			addit[i].rdata = (unsigned char*)malloc(ntohs(addit[i].resource->data_len));
 			for(j=0;j<ntohs(addit[i].resource->data_len);j++)
 			addit[i].rdata[j]=reader[j];
-
 			addit[i].rdata[ntohs(addit[i].resource->data_len)]='\0';
 			reader+=ntohs(addit[i].resource->data_len);
 		}
